@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"pl.sydygaliev.java_journey.Controller"},{"l":"pl.sydygaliev.java_journey.model"},{"l":"pl.sydygaliev.java_journey.model.exception"},{"l":"pl.sydygaliev.java_journey.view"}];updateSearchResults();

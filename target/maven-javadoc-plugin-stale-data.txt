@@ -1,0 +1,59 @@
+@options
+@packages
+@argfile
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2022. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'java_journey 1.0-Beta API'
+-use
+-version
+-windowtitle
+'java_journey 1.0-Beta API'
+pl.sydygaliev.java_journey.Controller
+pl.sydygaliev.java_journey.model.exception
+pl.sydygaliev.java_journey.model
+pl.sydygaliev.java_journey.view
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/Controller/MainController.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/Controller/package-info.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/model/exception/NonAlphaNumericException.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/model/exception/package-info.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/model/exception/WrongFormatException.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/model/InitialHandlerAndStorer.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/model/MessageModel.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/model/MessageOperator.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/model/package-info.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/view/package-info.java'
+'C:/Users/Kloody/Documents/NetBeansProjects/java_journey/src/main/java/pl/sydygaliev/java_journey/view/View.java'
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\src\main\java = 1669130887163
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\allclasses-index.html = 1671281040695
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\allpackages-index.html = 1671281040700
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\element-list = 1671281040500
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\help-doc.html = 1671281040745
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\index-all.html = 1671281040735
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\index.html = 1671281040662
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\jquery-ui.overrides.css = 1671281040799
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\member-search-index.js = 1671281040708
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\module-search-index.js = 1671281040702
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\overview-summary.html = 1671281040737
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\overview-tree.html = 1671281040652
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\package-search-index.js = 1671281040704
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\script.js = 1671281040751
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\search.js = 1671281040757
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\serialized-form.html = 1671281040581
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\stylesheet.css = 1671281040748
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\tag-search-index.js = 1671281040711
+C:\Users\Kloody\Documents\NetBeansProjects\java_journey\target\site\apidocs\type-search-index.js = 1671281040706

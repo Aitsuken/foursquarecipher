@@ -1,151 +1,140 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pl.sydygaliev.java_journey.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import pl.sydygaliev.java_journey.model.exception.NonAlphaNumericException;
 import pl.sydygaliev.java_journey.view.View;
 
 /**
+ * Handles encrypting and decrypting operations. The heart of this program.
  *
  * @author Ulan Sydygaliev
+ * @version f2
  */
 public class MessageOperator {
 
-    private final char[][] SQUARE_FOR_ENCRYPTION = {
-        {
-            'a', 'b', 'c', 'd', 'e'
-        }, {
-            'f', 'g', 'h', 'i', 'j'
-        }, {
-            'k', 'l', 'm', 'n', 'o'
-        }, {
-            'p', 'r', 's', 't', 'u'
-        }, {
-            'v', 'w', 'x', 'y', 'z'
-        }
-    };
+    /**
+     * Generic 5x5 matrix containing all letters from the English alphabet
+     * except q
+     */
+    private List<Character> squareForEncryption = new ArrayList<>();
+    
+    /**
+     * 5x5 that will be generated based on provided keyword1
+     */
+    private List<Character> squareFromKeyword1 = new ArrayList<>();
+    /**
+     * 5x5 that will be generated based on provided keyword2
+     */
+    private List<Character> squareFromKeyword2 = new ArrayList<>();
 
-    private char[][] squareFromKeyword1;
-    private char[][] squareFromKeyword2;
-    private char[][] fourSquareMatrix;
-
+    /**
+     * Operates with keywords. Fining up the keywords for stable matrix
+     * generation.
+     *
+     * @param keyword1 used for generating the top-right square
+     * @param keyword2 used for generating the bottom-left square
+     */
     public MessageOperator(String keyword1, String keyword2) {
-        //initialization of main 10x10 matrix
-        fourSquareMatrix = new char[10][10];
+
+        //generic "matrix" initialization
+        for (int i = (int) 'a'; i <= (int) 'z'; i++) {
+            if ((char) i != 'q') {
+                squareForEncryption.add((char) i);
+            }
+        }
 
         //preparing keywords for squares
-        char[] tunedKeyword1 = keywordPolish(keyword1);
-        char[] tunedKeyword2 = keywordPolish(keyword2);
+        List<Character> tunedKeyword1 = keywordPolish(keyword1);
 
-        //setup for testing
-        for (int i = 0; i < fourSquareMatrix.length; i++) {
-            for (int j = 0; j < fourSquareMatrix[0].length; j++) {
-                fourSquareMatrix[i][j] = 'a';
-            }
-        }
-
-        //set up for two generic squares
-        for (int i = 0; i < SQUARE_FOR_ENCRYPTION.length; i++) {
-            for (int j = 0; j < SQUARE_FOR_ENCRYPTION[0].length; j++) {
-                fourSquareMatrix[i][j] = SQUARE_FOR_ENCRYPTION[i][j];
-            }
-        }
-
-        for (int i = 5; i < SQUARE_FOR_ENCRYPTION.length + 5; i++) {
-            for (int j = 5; j < SQUARE_FOR_ENCRYPTION[0].length + 5; j++) {
-                fourSquareMatrix[i][j] = SQUARE_FOR_ENCRYPTION[i - 5][j - 5];
-            }
-        }
+        List<Character> tunedKeyword2 = keywordPolish(keyword2);
 
         squareFromKeyword1 = generateMatrixOnTunedKeyword(tunedKeyword1);
         squareFromKeyword2 = generateMatrixOnTunedKeyword(tunedKeyword2);
-
-        for (int i = 0; i < 5; i++) {
-            for (int j = 5; j < 10; j++) {
-                fourSquareMatrix[i][j] = squareFromKeyword1[i][j - 5];
-            }
-        }
-
-        for (int i = 5; i < 10; i++) {
-            for (int j = 0; j < 5; j++) {
-                fourSquareMatrix[i][j] = squareFromKeyword2[i - 5][j];
-            }
-        }
-
+        
     }
 
-    private char[] keywordPolish(String keyword) {
+    /**
+     * Used to tune keyword and leaves only English letters valid for encryption
+     *
+     * @param keyword keyword to be tuned
+     * @return polished keyword
+     */
+    private List<Character> keywordPolish(String keyword) {
         keyword = keyword.toLowerCase();
         String tunedKeyword = "";
 
-        char[] keywordArray = keyword.toCharArray();
-        for (char i : keywordArray) {
+        List<Character> keywordList = keyword.chars().mapToObj(character -> (char) character).collect(Collectors.toList());
+        for (char i : keywordList) {
             if (i != 'q' && (i >= 97 && i <= 122)) {
                 tunedKeyword += i;
             }
         }
-
-        String finalTunedKeyword = "";
+        List<Character> finalTunedKeyword = new ArrayList<>();
         // loop to ensure that every letter is unique
         for (char keywordLetter : tunedKeyword.toCharArray()) {
             int contains = 0;
-            for (int i = 0; i < finalTunedKeyword.length(); i++) {
-                if (keywordLetter == finalTunedKeyword.charAt(i)) {
+            for (int i = 0; i < finalTunedKeyword.size(); i++) {
+                if (keywordLetter == finalTunedKeyword.get(i)) {
                     contains++;
                 }
             }
-            if (contains > 0) {
-                continue;
-            } else {
-                finalTunedKeyword += keywordLetter;
+            if (contains == 0) {
+                finalTunedKeyword.add(keywordLetter);
             }
         }
 
-        return finalTunedKeyword.toCharArray();
+        return finalTunedKeyword;
     }
 
-    private boolean isCharacterPresentAndCurrent(char character, char[] characters) {
-        char[] newArray = characters.clone();
-        Arrays.sort(newArray);
-        for (char i : newArray) {
+    /**
+     * Detects if character is present within the matrix
+     *
+     * @param character character to be checked with matrix
+     * @param characters matrix to be checked
+     * @return true if character is present and current or false otherwise
+     */
+    private boolean isCharacterPresentAndCurrent(char character, List<Character> characters) {
+        List<Character> sortedList = new ArrayList<>(characters);
+        Collections.sort(sortedList);
+        for (char i : sortedList) {
             if (character == i) {
                 return true;
             }
         }
         return false;
-
     }
 
-    private char[][] generateMatrixOnTunedKeyword(char[] tunedKeyword) {
-        char[][] matrixOnTunedKeyword = new char[5][5];
+    /**
+     * Generates matrix based on provided keyword
+     *
+     * @param tunedKeyword polished keyword
+     * @return generated matrix
+     */
+    private List<Character> generateMatrixOnTunedKeyword(List<Character> tunedKeyword) {
+        List<Character> matrixOnTunedKeyword = new ArrayList<>(25);
         int letters = 97;
 
-        int count = tunedKeyword.length;
+        int count = tunedKeyword.size();
 
         //setting up characters from the keyword
         int countForLettersFromKeyword = 0;
-        for (int i = 0; i < tunedKeyword.length / 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                matrixOnTunedKeyword[i][j] = tunedKeyword[countForLettersFromKeyword];
-                countForLettersFromKeyword++;
-            }
-        }
-        for (int i = 0; i < tunedKeyword.length % 5; i++) {
-            matrixOnTunedKeyword[tunedKeyword.length / 5][i]
-                    = tunedKeyword[tunedKeyword.length - tunedKeyword.length % 5 + i];
+        for (int i = 0; i < tunedKeyword.size(); i++) {
+            matrixOnTunedKeyword.add(tunedKeyword.get(countForLettersFromKeyword));
+            countForLettersFromKeyword++;
         }
 
         //setting the rest of letters for the matrix
         int isFirstRun = 0;
-        for (int i = tunedKeyword.length / 5; i < 5; i++) {
+        for (int i = tunedKeyword.size() / 5; i < 5; i++) {
             if (isFirstRun > 0) {
                 for (int j = 0; j < 5; j++) {
                     char letter = (char) letters;
                     if (!isCharacterPresentAndCurrent(letter, tunedKeyword) && letter != 'q') {
-                        matrixOnTunedKeyword[i][j] = letter;
+                        matrixOnTunedKeyword.add(letter);
                         letters++;
                     } else {
                         letters++;
@@ -153,16 +142,15 @@ public class MessageOperator {
                     }
                 }
             } else {
-                for (int j = tunedKeyword.length % 5; j < 5; j++) {
+                for (int j = tunedKeyword.size() % 5; j < 5; j++) {
                     char letter = (char) letters;
                     if (!isCharacterPresentAndCurrent(letter, tunedKeyword) && letter != 'q') {
-                        matrixOnTunedKeyword[i][j] = letter;
+                        matrixOnTunedKeyword.add(letter);
                         letters++;
                     } else {
                         letters++;
                         j--;
                     }
-
                 }
             }
 
@@ -172,7 +160,13 @@ public class MessageOperator {
         return matrixOnTunedKeyword;
     }
 
-    //work in progress
+    /**
+     * Encrypts provided tuned message using four square cipher
+     *
+     * @param tunedMessage message that was tuned, it's important to have
+     * message with only English letters
+     * @return encrypted message
+     */
     public String encryptMessage(String tunedMessage) {
         StringBuilder encryptedMessage = new StringBuilder();
         for (int i = 0; i < tunedMessage.length() - 1; i += 2) {
@@ -186,31 +180,36 @@ public class MessageOperator {
             int coordinates2 = 0;
 
             for (int j = 0; j < 25; j++) {
-                if (firstCharacter == this.SQUARE_FOR_ENCRYPTION[j / 5][j % 5]) {
+                if (firstCharacter == this.squareForEncryption.get(j)) {
                     coordinates1 = j;
                     break;
                 }
             }
 
             for (int j = 0; j < 25; j++) {
-                if (secondCharacter == this.SQUARE_FOR_ENCRYPTION[j / 5][j % 5]) {
+                if (secondCharacter == this.squareForEncryption.get(j)) {
                     coordinates2 = j;
                     break;
                 }
             }
 
-            encryptedCharacter1 = this.squareFromKeyword1[coordinates1 / 5][coordinates2 % 5];
-            encryptedCharacter2 = this.squareFromKeyword2[coordinates2 / 5][coordinates1 % 5];
+            encryptedCharacter1 = this.squareFromKeyword1.get(coordinates1 / 5 * 5 + coordinates2 % 5);
+            encryptedCharacter2 = this.squareFromKeyword2.get(coordinates2 / 5 * 5 + coordinates1 % 5);
 
             encryptedMessage.append(encryptedCharacter1);
             encryptedMessage.append(encryptedCharacter2);
-
 
         }
 
         return encryptedMessage.toString();
     }
 
+    /**
+     * Decrypts provided encrypted message
+     *
+     * @param encryptedMessage message that is encrypted using cipher
+     * @return decrypted message
+     */
     public String decryptMessage(String encryptedMessage) {
         StringBuilder decryptedMessage = new StringBuilder();
 
@@ -225,43 +224,26 @@ public class MessageOperator {
             int coordinates2 = 0;
 
             for (int j = 0; j < 25; j++) {
-                if (firstCharacter == this.squareFromKeyword1[j / 5][j % 5]) {
+                if (firstCharacter == this.squareFromKeyword1.get((j / 5 * 5 + j % 5))) {
                     coordinates1 = j;
                     break;
                 }
             }
 
             for (int j = 0; j < 25; j++) {
-                if (secondCharacter == this.squareFromKeyword2[j / 5][j % 5]) {
+                if (secondCharacter == this.squareFromKeyword2.get(j / 5 * 5 + j % 5)) {
                     coordinates2 = j;
                     break;
                 }
             }
 
-            decryptedCharacter1 = this.SQUARE_FOR_ENCRYPTION[coordinates1 / 5][coordinates2 % 5];
-            decryptedCharacter2 = this.SQUARE_FOR_ENCRYPTION[coordinates2 / 5][coordinates1 % 5];
+            decryptedCharacter1 = this.squareForEncryption.get(coordinates1 / 5 * 5 + coordinates2 % 5);
+            decryptedCharacter2 = this.squareForEncryption.get(coordinates2 / 5 * 5 + coordinates1 % 5);
 
             decryptedMessage.append(decryptedCharacter1);
             decryptedMessage.append(decryptedCharacter2);
-            
-
 
         }
         return decryptedMessage.toString();
     }
-
-    public String messageHandler(String message) {
-        try {
-            int count = 0;
-            for (char i : message.toCharArray()) {
-            }
-            if (count > 0) {
-                throw new NonAlphaNumericException();
-            }
-        } catch (NonAlphaNumericException e) {
-            return null;
-        }
-        return message;
-    }
-
 }
