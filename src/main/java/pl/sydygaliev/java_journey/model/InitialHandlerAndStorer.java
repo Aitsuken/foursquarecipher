@@ -2,6 +2,7 @@ package pl.sydygaliev.java_journey.model;
 
 import java.util.Random;
 import pl.sydygaliev.java_journey.model.exception.NonAlphaNumericException;
+import pl.sydygaliev.java_journey.model.exception.UnexpectedModeException;
 import pl.sydygaliev.java_journey.model.exception.WrongFormatException;
 
 /**
@@ -50,20 +51,17 @@ public class InitialHandlerAndStorer {
      * @return message if it's valid null if it didn't pass the validity check
      *
      */
-    public String handleMessage(String message) {
-        try {
-            if (message.length() == 0) {
-                throw new WrongFormatException();
+    public String handleMessage(String message) throws WrongFormatException, NonAlphaNumericException {
+
+        if (message.length() == 0) {
+            throw new WrongFormatException();
+        }
+        for (int i = 0; i < message.length(); i++) {
+            if (!((message.charAt(i) <= 122 && message.charAt(i) >= 97)
+                    || (message.charAt(i) <= 90 && message.charAt(i) >= 63)
+                    || (message.charAt(i) <= 57 && message.charAt(i) >= 32)) || message.charAt(i) == 63) {
+                throw new NonAlphaNumericException();
             }
-            for (int i = 0; i < message.length(); i++) {
-                if (!((message.charAt(i) <= 122 && message.charAt(i) >= 97)
-                        || (message.charAt(i) <= 90 && message.charAt(i) >= 63)
-                        || (message.charAt(i) <= 57 && message.charAt(i) >= 32)) || message.charAt(i) == 63) {
-                    throw new NonAlphaNumericException();
-                }
-            }
-        } catch (NonAlphaNumericException | WrongFormatException e) {
-            return null;
         }
 
         return message;
@@ -99,12 +97,13 @@ public class InitialHandlerAndStorer {
      * with presented values. Otherwise, it returns null
      *
      * @param mode parameter that was selected by the user
+     * @throws UnexpectedModeException when given mode is illegal
      */
-    public void handleMode(String mode) {
+    public void handleMode(String mode) throws UnexpectedModeException{
         if ("1".equals(mode) || "0".equals(mode)) {
             this.mode = mode;
         } else {
-            this.mode = null;
+            throw new UnexpectedModeException();
         }
     }
 
@@ -134,12 +133,37 @@ public class InitialHandlerAndStorer {
         return keyword.toString();
     }
 
+    /**
+     * Handles args approach
+     *
+     * @param args varargs of Strings
+     * @return
+     */
     public ModeEnum argsHandler(String... args) {
-        if (args.length != 1 && args.length != 3) {
-            return ModeEnum.NONARGS;
+        ModeEnum noArgs = ModeEnum.NONARGS;
+        if (args.length == 0) {
+            return ModeEnum.NOARGS_ATALL;
         }
-
-        return ModeEnum.NONARGS;
+        if (args.length != 1 && args.length != 3 && args.length > 0) {
+            return noArgs;
+        }
+        try {
+            this.message = handleMessage(args[0]);
+        } catch (WrongFormatException | NonAlphaNumericException e) {
+            return noArgs;
+        }
+        if (args.length == 1) {
+            setKeyword1(automaticKeywordSetter());
+            setKeyword2(automaticKeywordSetter());
+        } else if (args.length == 3) {
+            try {
+                keyword1 = handleKeyword(args[1]);
+                keyword2 = handleKeyword(args[2]);
+            } catch (WrongFormatException e) {
+                return ModeEnum.NONARGS;
+            }
+        }
+        return ModeEnum.ARGS;
     }
 
     /**
@@ -159,7 +183,8 @@ public class InitialHandlerAndStorer {
      * console gui
      */
     public void setMessage(String message) {
-        this.message = handleMessage(message);
+        this.message = message;
+
     }
 
     /**

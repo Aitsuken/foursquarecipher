@@ -5,6 +5,5 @@ package pl.sydygaliev.java_journey.model.exception;
  * @author Ulan Sydygaliev
  * @version f1
  */
-
 public class WrongFormatException extends Exception{
 }

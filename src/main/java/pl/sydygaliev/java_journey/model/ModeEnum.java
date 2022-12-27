@@ -13,5 +13,9 @@ public enum ModeEnum {
     /**
      * No-args mode
      */
-    NONARGS
+    NONARGS,
+    /**
+     * No-args provided at all mode
+     */
+    NOARGS_ATALL
 }

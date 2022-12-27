@@ -12,8 +12,7 @@ public class MessageModel {
     /**
      * message field to store message for the cipher
      */
-    private String message;
-
+    private Data<Message> message;
     /**
      * stores encrypted message
      */
@@ -63,20 +62,20 @@ public class MessageModel {
      */
     private String tuneMessage(String message) {
         char[] messageArray = message.toCharArray();
-        StringBuilder originalMessageKeys = new StringBuilder();
+        StringBuilder originalKeysOfMessage = new StringBuilder();
 
         for (int i = 0; i < messageArray.length; i++) {
             char currentLetter = messageArray[i];
             if (currentLetter == 'q' || currentLetter == 'Q') {
-                originalMessageKeys.append(currentLetter);
+                originalKeysOfMessage.append(currentLetter);
             } else if (currentLetter >= 65 && currentLetter <= 90) {
-                originalMessageKeys.append('0');
+                originalKeysOfMessage.append('0');
 
             } else if (currentLetter >= 97 && currentLetter <= 122) {
-                originalMessageKeys.append('1');
+                originalKeysOfMessage.append('1');
 
             } else {
-                originalMessageKeys.append(currentLetter);
+                originalKeysOfMessage.append(currentLetter);
             }
         }
 
@@ -86,19 +85,19 @@ public class MessageModel {
         for (int i = 0; i < message.length(); i++) {
             char currentLetter = message.charAt(i);
             if (currentLetter != 'q'
-                    && (originalMessageKeys.charAt(i) == '0'
-                    || originalMessageKeys.charAt(i) == '1')) {
+                    && (originalKeysOfMessage.charAt(i) == '0'
+                    || originalKeysOfMessage.charAt(i) == '1')) {
                 tunedMessage.append(currentLetter);
             }
 
         }
         if (tunedMessage.length() % 2 != 0) {
-            originalMessageKeys.setCharAt(
-                    originalMessageKeys.length() - 1, tunedMessage.charAt(tunedMessage.length() - 1));
+            originalKeysOfMessage.setCharAt(
+                    originalKeysOfMessage.length() - 1, tunedMessage.charAt(tunedMessage.length() - 1));
             tunedMessage.deleteCharAt(tunedMessage.length() - 1);
         }
 
-        this.originalMessageKeys = originalMessageKeys.toString();
+        this.originalMessageKeys = originalKeysOfMessage.toString();
 
         return tunedMessage.toString();
     }
@@ -155,7 +154,7 @@ public class MessageModel {
      * @return message field
      */
     public String getMessage() {
-        return this.message;
+        return this.message.toString();
     }
 
 }

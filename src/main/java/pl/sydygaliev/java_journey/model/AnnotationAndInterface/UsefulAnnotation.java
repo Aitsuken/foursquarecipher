@@ -13,12 +13,13 @@ import java.lang.annotation.Target;
  * @version f2
  */
 @Documented
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ModeDecider {
+public @interface UsefulAnnotation {
     /**
-     * Useful to keep mode of the cipher
-     * @return mode, 0 if manual, 1 if automatic
+     * Indicates usefullness of the interface
+     * 0 if not useful at all, 1 if quite useful
+     * @return mode, 0 if useless, 1 if useful
      */
-    String mode() default "1";
+    int usefulness() default 0;
 }
