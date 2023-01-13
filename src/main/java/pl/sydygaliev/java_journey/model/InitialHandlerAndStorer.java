@@ -49,7 +49,8 @@ public class InitialHandlerAndStorer {
      *
      * @param message message to be encrypted, used for checking
      * @return message if it's valid null if it didn't pass the validity check
-     *
+     * @throws WrongFormatException when message is empty
+     * @throws NonAlphaNumericException when the message is not alpha-numeric
      */
     public String handleMessage(String message) throws WrongFormatException, NonAlphaNumericException {
 
@@ -137,8 +138,9 @@ public class InitialHandlerAndStorer {
      * Handles args approach
      *
      * @param args varargs of Strings
-     * @return
+     * @return finally decided mode
      */
+    
     public ModeEnum argsHandler(String... args) {
         ModeEnum noArgs = ModeEnum.NONARGS;
         if (args.length == 0) {

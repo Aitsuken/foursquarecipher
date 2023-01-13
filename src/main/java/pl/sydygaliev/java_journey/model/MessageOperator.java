@@ -20,7 +20,7 @@ public class MessageOperator {
      * Generic 5x5 matrix containing all letters from the English alphabet
      * except q
      */
-    private List<Character> squareForEncryption = new ArrayList<>();
+    private final List<Character> squareForEncryption = new ArrayList<>();
     
     /**
      * 5x5 that will be generated based on provided keyword1
@@ -54,7 +54,6 @@ public class MessageOperator {
 
         squareFromKeyword1 = generateMatrixOnTunedKeyword(tunedKeyword1);
         squareFromKeyword2 = generateMatrixOnTunedKeyword(tunedKeyword2);
-        
     }
 
     /**
@@ -67,7 +66,12 @@ public class MessageOperator {
         keyword = keyword.toLowerCase();
         String tunedKeyword = "";
 
-        List<Character> keywordList = keyword.chars().mapToObj(character -> (char) character).collect(Collectors.toList());
+        List<Character> keywordList = keyword.chars()
+                .mapToObj(character -> (char) character)
+                //
+                .filter(p -> p != 'q' && (p >= 97 && p <= 122))
+                .collect(Collectors.toList());
+        
         for (char i : keywordList) {
             if (i != 'q' && (i >= 97 && i <= 122)) {
                 tunedKeyword += i;
@@ -169,6 +173,7 @@ public class MessageOperator {
      */
     public String encryptMessage(String tunedMessage) {
         StringBuilder encryptedMessage = new StringBuilder();
+        
         for (int i = 0; i < tunedMessage.length() - 1; i += 2) {
             char firstCharacter = tunedMessage.charAt(i);
             char secondCharacter = tunedMessage.charAt(i + 1);
@@ -212,7 +217,7 @@ public class MessageOperator {
      */
     public String decryptMessage(String encryptedMessage) {
         StringBuilder decryptedMessage = new StringBuilder();
-
+        
         for (int i = 0; i < encryptedMessage.length() - 1; i += 2) {
             char firstCharacter = encryptedMessage.charAt(i);
             char secondCharacter = encryptedMessage.charAt(i + 1);

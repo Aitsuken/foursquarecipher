@@ -1,5 +1,10 @@
 package pl.sydygaliev.java_journey.model;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import pl.sydygaliev.java_journey.model.AnnotationAndInterface.MysteriousCombiner;
+
 /**
  * MessageModel class is used to store messages and keyword for further message
  * operations. It also used to store encrypted and decrypted messages.
@@ -61,45 +66,52 @@ public class MessageModel {
      * operations
      */
     private String tuneMessage(String message) {
-        char[] messageArray = message.toCharArray();
+        
+        MysteriousCombiner combinator = (m, c) ->
+        {
+          m.append(c);
+        };
+        
+        List<Character> charsList = message.chars()
+                .mapToObj(e -> (char) e)
+                .collect(Collectors.toList());
+        
         StringBuilder originalKeysOfMessage = new StringBuilder();
-
-        for (int i = 0; i < messageArray.length; i++) {
-            char currentLetter = messageArray[i];
-            if (currentLetter == 'q' || currentLetter == 'Q') {
-                originalKeysOfMessage.append(currentLetter);
-            } else if (currentLetter >= 65 && currentLetter <= 90) {
-                originalKeysOfMessage.append('0');
-
-            } else if (currentLetter >= 97 && currentLetter <= 122) {
-                originalKeysOfMessage.append('1');
-
-            } else {
-                originalKeysOfMessage.append(currentLetter);
+        
+        charsList.forEach(e ->
+        {
+            if(e == 'q' || e == 'Q'){
+                combinator.combine(originalKeysOfMessage, e);
+            }else if(e >= 65 && e <= 90){
+                combinator.combine(originalKeysOfMessage, '0');
+            }else if(e >= 97 && e <= 122){
+                combinator.combine(originalKeysOfMessage, '1');
+            }else{
+                combinator.combine(originalKeysOfMessage, e);
             }
-        }
-
-        StringBuilder tunedMessage = new StringBuilder();
+            
+        });
+        
+        System.out.println("message is " + message);
+        
+        StringBuilder polishedMessage = new StringBuilder();
         message = message.toLowerCase();
-
         for (int i = 0; i < message.length(); i++) {
             char currentLetter = message.charAt(i);
             if (currentLetter != 'q'
                     && (originalKeysOfMessage.charAt(i) == '0'
                     || originalKeysOfMessage.charAt(i) == '1')) {
-                tunedMessage.append(currentLetter);
+                polishedMessage.append(currentLetter);
             }
-
         }
-        if (tunedMessage.length() % 2 != 0) {
+        if (polishedMessage.length() % 2 != 0) {
             originalKeysOfMessage.setCharAt(
-                    originalKeysOfMessage.length() - 1, tunedMessage.charAt(tunedMessage.length() - 1));
-            tunedMessage.deleteCharAt(tunedMessage.length() - 1);
+                    originalKeysOfMessage.length() - 1, polishedMessage.charAt(polishedMessage.length() - 1));
+            polishedMessage.deleteCharAt(polishedMessage.length() - 1);
         }
 
         this.originalMessageKeys = originalKeysOfMessage.toString();
-
-        return tunedMessage.toString();
+        return polishedMessage.toString();
     }
 
     /**

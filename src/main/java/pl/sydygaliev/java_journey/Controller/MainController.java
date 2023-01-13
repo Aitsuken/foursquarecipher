@@ -15,7 +15,7 @@ import pl.sydygaliev.java_journey.view.View;
  * Main and sole controller which is used to communicate with other modules
  *
  * @author Ulan Sydygaliev
- * @version f1
+ * @version f2
  */
 public class MainController {
 
@@ -26,7 +26,11 @@ public class MainController {
      * @param args first arg - message, second and third(both optional) for
      * manual mode keyword1 and keyword2 for manual mode
      */
+    
     public static void main(String[] args) {
+
+
+        
 
         View view = new View();
 
@@ -80,6 +84,7 @@ public class MainController {
                 initialDi.getMessage(), initialDi.getKeyword1(), initialDi.getKeyword2());
         view.printMessage("The encrypted message is: " + msgModel.getEncryptedMessage());
         view.printMessage("The decrypted and restored message is: " + msgModel.getDecryptedMessage());
+
 
     }
 

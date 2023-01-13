@@ -3,6 +3,7 @@ package pl.sydygaliev.java_journey.model;
 /**
  * Type to store keyword
  * @author Ulan Sydygaliev
+ * @version f2
  */
 public class Keyword {
     /**
